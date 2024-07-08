@@ -7,9 +7,6 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
-	"go.uber.org/atomic"
-	"go.uber.org/zap"
-
 	"github.com/gotd/td/bin"
 	"github.com/gotd/td/clock"
 	"github.com/gotd/td/crypto"
@@ -20,6 +17,8 @@ import (
 	"github.com/gotd/td/tdsync"
 	"github.com/gotd/td/tmap"
 	"github.com/gotd/td/transport"
+	"go.uber.org/atomic"
+	"go.uber.org/zap"
 )
 
 // Handler will be called on received message from Telegram.
@@ -209,6 +208,7 @@ func (c *Conn) Run(ctx context.Context, f func(ctx context.Context) error) error
 		g.Go("saltsLoop", c.saltLoop)
 		g.Go("userCallback", f)
 		g.Go("readLoop", c.readLoop)
+		g.Go("engineClosedLoop", c.engineClosedLoop)
 
 		if err := g.Wait(); err != nil {
 			return errors.Wrap(err, "group")

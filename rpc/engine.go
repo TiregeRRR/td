@@ -7,10 +7,9 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
-	"go.uber.org/zap"
-
 	"github.com/gotd/td/bin"
 	"github.com/gotd/td/clock"
+	"go.uber.org/zap"
 )
 
 // Engine handles RPC requests.
@@ -73,7 +72,7 @@ type Request struct {
 // Do sends request to server and blocks until response is received, performing
 // multiple retries if needed.
 func (e *Engine) Do(ctx context.Context, req Request) error {
-	if e.isClosed() {
+	if e.IsClosed() {
 		return ErrEngineClosed
 	}
 
@@ -259,7 +258,7 @@ func (e *Engine) NotifyError(msgID int64, rpcErr error) {
 	_ = fn(nil, rpcErr)
 }
 
-func (e *Engine) isClosed() bool {
+func (e *Engine) IsClosed() bool {
 	return atomic.LoadUint32(&e.closed) == 1
 }
 
