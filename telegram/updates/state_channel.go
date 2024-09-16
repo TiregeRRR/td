@@ -5,11 +5,10 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
-	"go.opentelemetry.io/otel/trace"
-	"go.uber.org/zap"
-
 	"github.com/gotd/td/telegram"
 	"github.com/gotd/td/tg"
+	"go.opentelemetry.io/otel/trace"
+	"go.uber.org/zap"
 )
 
 type channelUpdate struct {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"sync"
 	"sync/atomic"
+	"syscall"
 	"time"
 
 	"github.com/go-faster/errors"
@@ -211,6 +212,10 @@ func (e *Engine) retryUntilAck(ctx context.Context, req Request) (sent bool, err
 				if err := e.send(ctx, req.MsgID, req.SeqNo, req.Input); err != nil {
 					if errors.Is(err, context.Canceled) {
 						return nil
+					}
+
+					if errors.Is(err, syscall.EPIPE) {
+						e.ForceClose()
 					}
 
 					log.Error("Retry failed", zap.Error(err))
