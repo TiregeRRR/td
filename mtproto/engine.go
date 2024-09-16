@@ -8,7 +8,7 @@ import (
 )
 
 func (c *Conn) engineClosedLoop(ctx context.Context) error {
-	ticker := c.clock.Ticker(time.Second * 5)
+	ticker := c.clock.Ticker(time.Second * 1)
 	defer ticker.Stop()
 
 	for {
